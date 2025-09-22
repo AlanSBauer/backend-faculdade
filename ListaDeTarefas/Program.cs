@@ -5,14 +5,17 @@ builder.Services.AddOpenApi();
 var app = builder.Build();
 
 var tarefas = new List<Tarefa>();
+var proximoId = 1;
 
-// Get /tarefas - Listar todas as tarefas
+//Get /tarefas = Lista todas as tarefas
+
 app.MapGet("/tarefas", () =>
 {
     return Results.Ok(tarefas);
 });
 
-// Get /tarefas/{id} - Buscar tarefa por id
+//Get /tarefas/{Id} - Buscar tarefa por Id
+
 app.MapGet("/tarefas/{id:int}", (int id) =>
 {
     Tarefa tarefaEncontrada = null;
@@ -23,21 +26,43 @@ app.MapGet("/tarefas/{id:int}", (int id) =>
             tarefaEncontrada = tarefa;
             return Results.Ok(tarefaEncontrada);
         }
-
-    };
-    return Results.NotFound($"Tarefa com id {id} não encontrada!");
+    }
+    return Results.NotFound($"tarefa com id {id} não encontrado");
 });
 
-// Put /tarefas/id - atualizar tarefa existente
+//put /tarefas/id - atualizar tarefa existente
 app.MapPut("/tarefas/{id:int}", (int id, Tarefa tarefaAtualizada) =>
 {
     var tarefaExistente = tarefas.FirstOrDefault(tarefa => tarefa.Id == id);
     if (tarefaExistente == null)
-        return Results.NotFound($"Tarefa com id {id} não foi encontrada!");
+        return Results.NotFound($"tarefa com id {id} não encontrado");
     tarefaExistente.Titulo = tarefaAtualizada.Titulo;
     tarefaExistente.Descricao = tarefaAtualizada.Descricao;
-    tarefaExistente.concluida = tarefaAtualizada.concluida;
+    tarefaExistente.Concluida = tarefaAtualizada.Concluida;
     return Results.Ok(tarefaExistente);
+});
+
+//Post /tarefas criar tarefas
+app.MapPost("/tarefas", (Tarefa novaTarefa) =>
+{
+    //Validação Básica
+    if (string.IsNullOrEmpty(novaTarefa.Titulo))
+        return Results.BadRequest($"O titulo é obrigatório");
+    // Configurar propriedades automáticas
+    novaTarefa.Id = proximoId++;
+    novaTarefa.DataCriacao = DateTime.Now;
+    novaTarefa.Concluida = false;
+    tarefas.Add(novaTarefa);
+    return Results.Created($"/tarefas/{novaTarefa.Id}", novaTarefa);
+});
+
+app.MapDelete("/tarefas/{id:int}", (int id) =>
+{
+    var tarefa = tarefas.FirstOrDefault(t => t.Id == id);
+    if (tarefa== null)
+        return Results.NotFound($"Tarefa com id {id} não encotrada!");
+    tarefas.Remove(tarefa);
+    return Results.NoContent();
 });
 
 if (app.Environment.IsDevelopment())
