@@ -1,0 +1,95 @@
+# --- Arquivo .gitignore para projeto .NET / ASP.NET Core ---
+# Baseado em templates oficiais + ajustes para este repositório
+
+############################
+# Build / Compilação
+############################
+[Bb]in/
+[Oo]bj/
+**/Debug/
+**/Release/
+artifacts/
+
+############################
+# VS / IDE / Editor
+############################
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+.idea/
+*.iml
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+############################
+# Logs / Diagnóstico
+############################
+[Ll]og/
+[Ll]ogs/
+*.log
+
+############################
+# Testes
+############################
+TestResult*/
+*.trx
+*.coverage
+*.coveragexml
+
+############################
+# NuGet / Pacotes
+############################
+packages/
+*.nupkg
+*.snupkg
+.nuget/
+# Lock antigo (usado em versões antigas)
+project.lock.json
+project.fragment.lock.json
+
+############################
+# Ferramentas / Análises
+############################
+_ReSharper.Caches/
+*.DotSettings.user
+.stylecop
+
+############################
+# Rider / JetBrains
+############################
+.idea/
+*.sln.iml
+
+############################
+# Sistema Operacional
+############################
+.DS_Store
+Thumbs.db
+desktop.ini
+
+############################
+# Secrets / Config sensível (manter fora do repo)
+############################
+secrets.json
+
+############################
+# Publish / Deploy
+############################
+publish/
+
+############################
+# Outros
+############################
+*.swp
+*.tmp
+*.bak
+
+# NÃO ignorar Migrations (necessárias)
+# !Migrations/
+
+# Fim
